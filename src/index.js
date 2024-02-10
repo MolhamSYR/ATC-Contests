@@ -22,20 +22,29 @@ app.use(bodyParser.json());
 
 
 const init = async () => {
+    console.log("SENDING A GET REQUEST TO TELEGRAM API TO SET WEBHOOK");
     const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
-    console.log(res);
+    console.log(res.data);
 };
 
 app.get('/', (req, res) => {
     res.send("Hello World! Again");
 })
 
-app.post(URI, (req, res) => {
+app.post(URI, async (req, res) => {
 
     console.log("RECIEVED AN UPDATE FROM TELEGRAM LETS FUCKIN GO!\n");
-    console.log(req.body);
+    const chatId = req.body.message.chat.id
+    const text = req.body.message.text
 
-    res.status(200).send("ok");
+    await axios.post(`${TELEGRAM_API}/sendMessage`, {
+        chat_id: chatId,
+        text: text
+    })
+
+    await axios.post(`${TEL_API}`)
+
+    return res.send();
 });
 
 
