@@ -9,7 +9,7 @@ var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
 const TOKEN = process.env.TELEGRAM_TOKEN;
-const bot = new TelegramBot(TOKEN, {polling: true});
+const bot = new TelegramBot(TOKEN); // TO DELETE LATER !!!!!!!
 const SERVER_URL = process.env.SERVER_URL;
 const TEL_API = `https://api.telegram.org/bot${TOKEN}`;
 const URI = `/webhook/${TOKEN}`;
@@ -20,17 +20,40 @@ const app = express();
 
 const init = async () => {
     const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
-    //console.log(res.data);
+   // console.log(res.data);
 };
 
 app.get('/', (req, res) => {
     res.send("Hello World!");
 })
 
+app.post(URI, (req, res) => {
+
+    console.log("RECIEVED AN UPDATE FROM TELEGRAM LETS FUCKIN GO!\n");
+    console.log(req.body);
+
+    res.status(200).send("ok");
+});
+
+
 app.listen(process.env.PORT || 3000, async () => {
     console.log("App Running on Port" + process.env.PORT || 3000);
     await init();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 let localData = { "chatID": -1 };
@@ -39,8 +62,6 @@ let MAIN_THREAD = -1;
 let MAX_DAYS = 7;
 
 
-
-var platforms = ["usaco", "codechef", "codeforces"];
 
 var usaco = "https://clist.by/api/v4/contest/?username=RuntimeError0&api_key=f11119d090d20aecdb2835c60d564587b92ac06a&resource_id=25&upcoming=true&format=json";
 var codechef = "https://clist.by/api/v4/contest/?username=RuntimeError0&api_key=f11119d090d20aecdb2835c60d564587b92ac06a&resource_id=2&upcoming=true&format=json";
