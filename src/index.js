@@ -2,16 +2,38 @@ const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
 const { isNumber } = require("util");
-var token = "6989861872:AAEgQLccoiQM8HkhGoe-2H8liDF889cbiy4";
+const axios = require('axios');
+
+
 var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
+const TOKEN = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, {polling: true});
+const SERVER_URL = process.env.SERVER_URL;
+const TEL_API = `https://api.telegram.org/bot${TOKEN}`;
+const URI = `/webhook/${TOKEN}`;
+const WEBHOOK_URI = SERVER_URL+URI
+
+const express = require('express');
+const app = express();
+
+const init = async () => {
+    const res = await axios.getAdapter(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
+    console.log(res.data);
+};
+
+app.listen(process.env.PORT || 3000, async () => {
+    console.log("App Running on Port" + process.env.PORT || 3000);
+    await init();
+});
+
 
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
 let MAX_DAYS = 7;
+
 
 
 var platforms = ["usaco", "codechef", "codeforces"];
@@ -223,8 +245,10 @@ bot.on("message", msg => {
             bot.sendMessage(msg.chat.id, "This group isn't a super-group!", {
                 "message_thread_id": topic
             })
-            return;
+            
         }
+
+        else {
 
         localData.chatID = msg.chat.id;
         localData.threadID = topic;
@@ -247,6 +271,7 @@ bot.on("message", msg => {
                     })
                 }
         });
+    }
 
     }
 
