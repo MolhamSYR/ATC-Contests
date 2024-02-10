@@ -9,7 +9,7 @@ var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
 const TOKEN = process.env.TELEGRAM_TOKEN;
-const bot = new TelegramBot(TOKEN); // TO DELETE LATER !!!!!!!
+//const bot = new TelegramBot(TOKEN); // TO DELETE LATER !!!!!!!
 const SERVER_URL = process.env.SERVER_URL;
 const TEL_API = `https://api.telegram.org/bot${TOKEN}`;
 const URI = `/webhook/${TOKEN}`;
@@ -52,7 +52,7 @@ app.listen(process.env.PORT || 3000, async () => {
 
 
 
-
+/*
 
 
 
@@ -123,7 +123,7 @@ async function getCodeforces(chatid, threadid, maxtime) {
 
         msg += "<b>Name:</b> " + contest.name + '\n';
 
-        /* START OF TIME CONVERTING */
+         START OF TIME CONVERTING
         var dt = new Date(contest.startTimeSeconds * 1000);
         var now = new Date();
         var dateFormat = new Intl.DateTimeFormat("en-US", {
@@ -142,7 +142,7 @@ async function getCodeforces(chatid, threadid, maxtime) {
         var daydiff = Math.floor(start / (1000 * 60 * 60 * 24)); 
 
         if(daydiff > maxtime) continue;
-        /* END OF TIME CONVERTING */
+         END OF TIME CONVERTING 
 
         msg += "<b>Date:</b> " + lastdate + '\n';
         msg += "<b>Time Left:</b> " +  daydiff + " days left\n";
@@ -369,4 +369,4 @@ bot.on("message", msg => {
         
     }
 
-});
+});*/
