@@ -1,7 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
-
+const bot = require('./utils');
 require('dotenv').config()
 const express = require('express')
 const axios = require('axios')
@@ -20,16 +20,21 @@ const init = async () => {
     console.log(res.data)
 }
 
+// MAIN LISTENER 
 app.post(URI, async (req, res) => {
+
     console.log(req.body)
 
-    const chatId = req.body.message.chat.id
-    const text = req.body.message.text
+    // BOT ON MESSAGE
+    if(req.body.message != undefined) {
 
-    await axios.post(`${TELEGRAM_API}/sendMessage`, {
-        chat_id: chatId,
-        text: text
-    })
+        const chatId = req.body.message.chat.id;
+        const txt = req.body.message.text;
+
+
+        bot.sendMessage(chatId, txt, undefined);
+
+    }
     return res.send()
 })
 
@@ -50,10 +55,10 @@ app.listen(process.env.PORT || 5000, async () => {
 
 /*var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');*/
+
+
+
 /*
-
-
-
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
@@ -121,7 +126,7 @@ async function getCodeforces(chatid, threadid, maxtime) {
 
         msg += "<b>Name:</b> " + contest.name + '\n';
 
-         START OF TIME CONVERTING
+        
         var dt = new Date(contest.startTimeSeconds * 1000);
         var now = new Date();
         var dateFormat = new Intl.DateTimeFormat("en-US", {
@@ -140,7 +145,7 @@ async function getCodeforces(chatid, threadid, maxtime) {
         var daydiff = Math.floor(start / (1000 * 60 * 60 * 24)); 
 
         if(daydiff > maxtime) continue;
-         END OF TIME CONVERTING 
+         
 
         msg += "<b>Date:</b> " + lastdate + '\n';
         msg += "<b>Time Left:</b> " +  daydiff + " days left\n";
@@ -250,98 +255,6 @@ bot.on("message", msg => {
          });
     }
 
-    else if(txt == "/sendchannel") {
-        bot.sendMessage(msg.chat.id, "Main Channel ID: " + MAIN_CHANNEL, {
-            message_thread_id: topic
-        });
-        bot.sendMessage(msg.chat.id, "A message has been sent to the main channel successfully!", {
-            message_thread_id: topic
-        });
-        bot.sendMessage(MAIN_CHANNEL, "This message has been sent to the main channel via a command!", {
-            message_thread_id: MAIN_THREAD
-        });
-    }
-
-    else if(txt == "/setchannel") {
-
-        if(!msg.chat.is_forum) {
-            bot.sendMessage(msg.chat.id, "This group isn't a super-group!", {
-                "message_thread_id": topic
-            })
-            
-        }
-
-        else {
-
-        localData.chatID = msg.chat.id;
-        localData.threadID = topic;
-        MAIN_THREAD = topic;
-        MAIN_CHANNEL = msg.chat.id;
-        var newJsonData = JSON.stringify(localData);
-        console.log(filePath);
-        fs.writeFile(filePath, newJsonData, (err) => {
-                if(err) {
-                    bot.sendMessage(msg.chat.id, "Error Occurred!", {
-                        "message_thread_id": topic
-                    });
-                }
-
-                else {
-                  
-                    bot.sendMessage(msg.chat.id, "<b>The main channel has been set to this channel successfully!</b>", {
-                        "parse_mode": "HTML",
-                        "message_thread_id": topic
-                    })
-                }
-        });
-    }
-
-    }
-
-    else if(txt.substring(0, txt.indexOf(" ")) == "/setmaxdays") {
-        const para = txt.substring(txt.indexOf(" ") + 1);
-        try {
-            const num = parseInt(para);
-            if(num < 0) {
-                bot.sendMessage(msg.chat.id, "Number can't be negative!", {
-                    "message_thread_id": topic
-                })
-            }
-
-            else {
-                localData.maxDays = num;
-                const newData = JSON.stringify(localData);
-                MAX_DAYS = num;
-                fs.writeFile(filePath, newData, (err) => {
-
-                    if(err) {
-                        bot.sendMessage(msg.chat.id, "An error occurred!", {
-                            message_thread_id: topic
-                        });
-                        console.log(err);
-                    }
-
-                    else {
-                        bot.sendMessage(msg.chat.id, "<b>Max Days has been set to " + num + " successfully! </b>", {
-                            message_thread_id: topic,
-                            parse_mode: "HTML"
-                        })
-
-                    }
-
-                })
-
-            }
-
-        } catch(err) {
-            bot.sendMessage(msg.chat.id, "" + para + " isn't a number!", {
-                "message_thread_id": topic
-            });
-        }
-
-
-    }
-
     else if(txt.substring(0, txt.indexOf(" ")) == "/contests") {
 
         const platform = txt.substring(txt.indexOf(" ") + 1);
@@ -359,9 +272,7 @@ bot.on("message", msg => {
         }
 
         else {
-            bot.sendMessage(msg.chat.id, "Platform " + platform + " isn't in my database!", {
-                "message_thread_id": topic
-            });
+            bot.sendMessage(msg.chat.id, "Platform " + platform + " isn't in my database!", topic);
         }
 
         
