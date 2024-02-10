@@ -1,0 +1,17 @@
+{
+  "name": "atc-contests",
+  "version": "1.0.0", 
+  "description": "A telegram bot that gives info about upcoming competitive programming contests",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/bot.js"
+  },
+  "author": "xHurricane",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "node-telegram-bot-api": "^0.64.0",
+    "nodemon": "^3.0.3"
+  }
+}
