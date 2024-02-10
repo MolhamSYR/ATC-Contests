@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { isNumber } = require("util");
 const axios = require('axios');
-
+const bodyParser = require('body-parser');
 
 var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
@@ -18,7 +18,7 @@ const WEBHOOK_URI = SERVER_URL+URI
 const express = require('express');
 const app = express();
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 
 const init = async () => {
