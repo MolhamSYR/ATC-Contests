@@ -4,7 +4,7 @@ const TELEGRAM_API = `https://api.telegram.org/bot${TOKEN}`
 
 async function sendMessage(chatid, msgText, threadid) {
 
-    axios.post(`${TELEGRAM_API}/sendMessage`, {
+    await axios.post(`${TELEGRAM_API}/sendMessage`, {
         chat_id: chatid,
         message_thread_id: threadid,
         text: msgText,
