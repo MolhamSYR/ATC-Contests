@@ -23,6 +23,10 @@ const init = async () => {
     console.log(res.data);
 };
 
+app.get('/', (req, res) => {
+    res.send("Hello World!");
+})
+
 app.listen(process.env.PORT || 3000, async () => {
     console.log("App Running on Port" + process.env.PORT || 3000);
     await init();
