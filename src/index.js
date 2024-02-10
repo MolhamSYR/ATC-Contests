@@ -41,7 +41,10 @@ app.post(URI, async (req, res) => {
 
         const chatId = req.body.message.chat.id;
         const txt = req.body.message.text;
-        const topic = req.body.message.is_topic_message ? req.body.message.message_thread_id : undefined;
+        var topic = undefined;
+
+        if(req.body.message.is_topic_message === true) topic = req.body.message.message_thread_id;
+
         if(topic != undefined) {
             await sendMessage(chatId, txt, topic);
         }
@@ -49,6 +52,7 @@ app.post(URI, async (req, res) => {
         else {
             await sendMessage(chatId, txt);
         }
+        
     }
 
     return res.send()
