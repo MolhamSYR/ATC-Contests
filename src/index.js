@@ -1,39 +1,28 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
-const { isNumber } = require("util");
-const axios = require('axios');
-const bodyParser = require('body-parser');
 
-var filePath = path.join(process.cwd(), 'src');
-filePath = path.join(filePath, 'data.json');
+require('dotenv').config()
+const express = require('express')
+const axios = require('axios')
+const bodyParser = require('body-parser')
 
-const TOKEN = process.env.TELEGRAM_TOKEN;
-//const bot = new TelegramBot(TOKEN); // TO DELETE LATER !!!!!!!
-const SERVER_URL = process.env.SERVER_URL;
-const TEL_API = `https://api.telegram.org/bot${TOKEN}`;
-const URI = `/webhook/${TOKEN}`;
-const WEBHOOK_URI = SERVER_URL+URI
+const { TOKEN, SERVER_URL } = process.env
+const TELEGRAM_API = `https://api.telegram.org/bot${TOKEN}`
+const URI = `/webhook/${TOKEN}`
+const WEBHOOK_URL = SERVER_URL + URI
 
-const express = require('express');
-const app = express();
-
-app.use(bodyParser.json());
-
+const app = express()
+app.use(bodyParser.json())
 
 const init = async () => {
-    console.log("SENDING A GET REQUEST TO TELEGRAM API TO SET WEBHOOK");
-    const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
-    console.log(res.data);
-};
-
-app.get('/', (req, res) => {
-    res.send("Hello World! Again");
-})
+    const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`)
+    console.log(res.data)
+}
 
 app.post(URI, async (req, res) => {
+    console.log(req.body)
 
-    console.log("RECIEVED AN UPDATE FROM TELEGRAM LETS FUCKIN GO!\n");
     const chatId = req.body.message.chat.id
     const text = req.body.message.text
 
@@ -41,17 +30,13 @@ app.post(URI, async (req, res) => {
         chat_id: chatId,
         text: text
     })
+    return res.send()
+})
 
-    await axios.post(`${TEL_API}`)
-
-    return res.send();
-});
-
-
-app.listen(process.env.PORT || 3000, async () => {
-    console.log("App Running on Port" + process.env.PORT || 3000);
-    await init();
-});
+app.listen(process.env.PORT || 5000, async () => {
+    console.log('🚀 app running on port', process.env.PORT || 5000)
+    await init()
+})
 
 
 
@@ -63,7 +48,8 @@ app.listen(process.env.PORT || 3000, async () => {
 
 
 
-
+/*var filePath = path.join(process.cwd(), 'src');
+filePath = path.join(filePath, 'data.json');*/
 /*
 
 
