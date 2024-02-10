@@ -1,7 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
-const bot = require('./utils');
 require('dotenv').config()
 const express = require('express')
 const axios = require('axios')
@@ -20,6 +19,18 @@ const init = async () => {
     console.log(res.data)
 }
 
+async function sendMessage(chatid, msgText, threadid) {
+
+    await axios.post(`${TELEGRAM_API}/sendMessage`, {
+        chat_id: chatid,
+        message_thread_id: threadid,
+        text: msgText,
+        parse_mode: "HTML"
+    });
+
+}
+
+
 // MAIN LISTENER 
 app.post(URI, async (req, res) => {
 
@@ -31,10 +42,10 @@ app.post(URI, async (req, res) => {
         const chatId = req.body.message.chat.id;
         const txt = req.body.message.text;
 
-
-        bot.sendMessage(chatId, txt, undefined);
-
+        await sendMessage(chatId, txt, undefined);
+        
     }
+
     return res.send()
 })
 
