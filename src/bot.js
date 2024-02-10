@@ -2,15 +2,17 @@ const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
 const { isNumber } = require("util");
-const token = "6989861872:AAEgQLccoiQM8HkhGoe-2H8liDF889cbiy4";
+var token = "6989861872:AAEgQLccoiQM8HkhGoe-2H8liDF889cbiy4";
 var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
+
+const bot = new TelegramBot(token, {polling: true});
 
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
 let MAX_DAYS = 7;
-const bot = new TelegramBot(token, {polling:true});
+
 
 var platforms = ["usaco", "codechef", "codeforces"];
 
@@ -212,6 +214,14 @@ bot.on("message", msg => {
     }
 
     else if(txt == "/setchannel") {
+
+        if(!msg.chat.is_forum) {
+            bot.sendMessage(msg.chat.id, "This group isn't a super-group!", {
+                "message_thread_id": topic
+            })
+            return;
+        }
+
         localData.chatID = msg.chat.id;
         localData.threadID = topic;
         MAIN_THREAD = topic;
