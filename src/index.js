@@ -11,12 +11,12 @@ const TELEGRAM_API = `https://api.telegram.org/bot${TOKEN}`
 const URI = `/webhook/${TOKEN}`
 const WEBHOOK_URL = SERVER_URL + URI
 
-const app = express()
-app.use(bodyParser.json())
+const app = express();
+app.use(bodyParser.json());
 
 const init = async () => {
     const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`)
-    console.log(res.data)
+    console.log(res.data);
 }
 
 async function sendMessage(chatid, msgText, threadid) {
@@ -46,10 +46,12 @@ app.post(URI, async (req, res) => {
         if(req.body.message.is_topic_message === true) topic = req.body.message.message_thread_id;
 
         if(topic != undefined) {
+            console.log("TOPIC MESSAGE DETECTED, WILL SEND IT NOW: ");
             await sendMessage(chatId, txt, topic);
         }
 
         else {
+            console.log("NORMAL MESSAGE DETECTED, WILL SEND IT NOW: ");
             await sendMessage(chatId, txt);
         }
         
