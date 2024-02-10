@@ -7,11 +7,20 @@ var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
 const bot = new TelegramBot(token, {polling: true});
+const express = require('express');
+const app = express();
+
+app.listen(() => {
+    console.log("LISTENING ON PORT 3000");
+}, 3000);
+
+bot.setWebHook("https://atccontests.cyclic.app/");
 
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
 let MAX_DAYS = 7;
+
 
 
 var platforms = ["usaco", "codechef", "codeforces"];
@@ -35,9 +44,13 @@ function updateContestsDaily(prevDay, chatid, threadid) {
     var day = dateFormat.format(now);
 
     if(day != prevDay) {
-        getCodeforces(chatid, threadid);
-        getContests(chatid, "Codechef", codechef, threadid);
-        getContests(chatid, "USACO", usaco, threadid);
+        bot.sendMessage(chatid, "<b>Daily Report: </b>\n", {
+            message_thread_id: threadid,
+            parse_mode: "HTML"
+        })
+        getCodeforces(chatid, threadid, 0);
+        getContests(chatid, "Codechef", codechef, threadid, 0);
+        getContests(chatid, "USACO", usaco, threadid, 0);
     }
 
     setTimeout(() => {
@@ -55,7 +68,7 @@ function diff_hours(dt2, dt1)
   
  }
 
-async function getCodeforces(chatid, threadid) {
+async function getCodeforces(chatid, threadid, maxtime) {
 
     const response = await fetch("https://codeforces.com/api/contest.list?gym=false");
     const data = await response.json();
@@ -90,7 +103,7 @@ async function getCodeforces(chatid, threadid) {
 
         var daydiff = Math.floor(start / (1000 * 60 * 60 * 24)); 
 
-        if(daydiff > MAX_DAYS) continue;
+        if(daydiff > maxtime) continue;
         /* END OF TIME CONVERTING */
 
         msg += "<b>Date:</b> " + lastdate + '\n';
@@ -114,7 +127,7 @@ async function getCodeforces(chatid, threadid) {
 
 }
 
-async function getContests(chatid, name, api, threadid) {
+async function getContests(chatid, name, api, threadid, maxtime) {
 
     const response = await fetch(api);
     const data = await response.json();
@@ -142,7 +155,7 @@ async function getContests(chatid, name, api, threadid) {
         var start = dt - now;
         var daydiff = Math.floor(start / (1000 * 60 * 60 * 24));  
 
-        if(daydiff > MAX_DAYS) continue;
+        if(daydiff > maxtime) continue;
 
         msg += "<b>Date:</b> " + lastdate + '\n';
         msg += "<b>Time Left:</b> " +  daydiff + " days left\n";
@@ -295,15 +308,15 @@ bot.on("message", msg => {
         const platform = txt.substring(txt.indexOf(" ") + 1);
         
         if(platform == "codeforces") {
-            getCodeforces(msg.chat.id, topic);
+            getCodeforces(msg.chat.id, topic, MAX_DAYS);
         }
 
         else if(platform == "codechef") {
-            getContests(msg.chat.id, "Codechef", codechef, topic);
+            getContests(msg.chat.id, "Codechef", codechef, topic, MAX_DAYS);
         }
 
         else if(platform == "usaco") {
-            getContests(msg.chat.id, "USACO", usaco, topic);
+            getContests(msg.chat.id, "USACO", usaco, topic, MAX_DAYS);
         }
 
         else {
