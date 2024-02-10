@@ -1,70 +1,17 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
-const axios = require('axios');
 const path = require('path');
 const { isNumber } = require("util");
 var token = "6989861872:AAEgQLccoiQM8HkhGoe-2H8liDF889cbiy4";
 var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
-const TELEGRAM_API = `https://api.telegram.org/bot${token}`;
-const URL = `/webhook/${token}`
-const SERVER_URL = "https://atccontests.cyclic.app";
-const webhookURL = `${SERVER_URL}${URL}`
-
 const bot = new TelegramBot(token, {polling: true});
-
-const express = require('express');
-const app = express();
-
-const setupWebhook = async () => {
-    try {
-        const { data } = await axios.get(`${TELEGRAM_API}/setWebhook?url=${webhookURL}&drop_pending_updates=true`)
-        console.log(data)
-    } catch (error) {
-        return error
-    }
-}
-
-
-
-app.use(express.json());
-app.get('/', (req, res) => {
-    
-})
-app.post(URL, (req, res) => {
-    console.log(req.body);
-
-    res.status(200).send('ok');
-})
-
-app.listen(3000, async () => {
-    
-    try {
-        console.log(`Server is up and Running at PORT : ${PORT}`)
-        await setupWebhook()
-    } catch (error) {
-        console.log(error.message)
-    }
-
-});
-
-
-
-
-
-
-
-
-
-
-
 
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
 let MAX_DAYS = 7;
-
 
 
 var platforms = ["usaco", "codechef", "codeforces"];
