@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 const init = async () => {
     const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
-    console.log(res.data);
+    console.log(res);
 };
 
 app.get('/', (req, res) => {
