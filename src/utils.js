@@ -13,4 +13,14 @@ async function sendMessage(chatid, msgText, threadid) {
 
 }
 
+async function sendMessage(chatid, msgText) {
+
+    await axios.post(`${TELEGRAM_API}/sendMessage`, {
+        chat_id: chatid,
+        text: msgText,
+        parse_mode: "HTML"
+    });
+
+}
+
 module.exports = {sendMessage};
