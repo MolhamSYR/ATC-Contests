@@ -18,13 +18,16 @@ const WEBHOOK_URI = SERVER_URL+URI
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
+
 const init = async () => {
     const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
     console.log(res.data);
 };
 
 app.get('/', (req, res) => {
-    res.send("Hello World!");
+    res.send("Hello World! Again");
 })
 
 app.post(URI, (req, res) => {
