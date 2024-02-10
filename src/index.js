@@ -1,11 +1,13 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config()
-const express = require('express')
-const axios = require('axios')
-const bodyParser = require('body-parser')
-
+require('dotenv').config();
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+const { TOKEN, SERVER_URL } = process.env
+const bot = new TelegramBot("6989861872:AAGS3k5BTWo1SK7SURCB2JpX79XUQ4uw4gs", {polling: true});
+/*
 const { TOKEN, SERVER_URL } = process.env
 const TELEGRAM_API = `https://api.telegram.org/bot${TOKEN}`
 const URI = `/webhook/${TOKEN}`
@@ -67,6 +69,7 @@ app.listen(process.env.PORT || 5000, async () => {
 
 
 
+*/
 
 
 
@@ -74,13 +77,12 @@ app.listen(process.env.PORT || 5000, async () => {
 
 
 
-
-/*var filePath = path.join(process.cwd(), 'src');
-filePath = path.join(filePath, 'data.json');*/
-
+var filePath = path.join(process.cwd(), 'src');
+filePath = path.join(filePath, 'data.json');
 
 
-/*
+
+
 let localData = { "chatID": -1 };
 let MAIN_CHANNEL = -1;
 let MAIN_THREAD = -1;
@@ -234,7 +236,7 @@ async function getContests(chatid, name, api, threadid, maxtime) {
 
 }
 
-fs.readFile(filePath, (err, content) => {
+/*fs.readFile(filePath, (err, content) => {
 
     if(err) {
         console.log(err);
@@ -247,7 +249,7 @@ fs.readFile(filePath, (err, content) => {
     MAIN_THREAD = localData.threadID;
     MAX_DAYS = localData.maxDays;
 });
-
+*/
 var now = new Date();
     var dateFormat = new Intl.DateTimeFormat("en-US", {
         timeZone: "Asia/Damascus",
@@ -300,4 +302,4 @@ bot.on("message", msg => {
         
     }
 
-});*/
+});
