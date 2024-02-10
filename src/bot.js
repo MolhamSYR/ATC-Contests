@@ -10,9 +10,12 @@ const bot = new TelegramBot(token, {polling: true});
 const express = require('express');
 const app = express();
 
-app.listen(() => {
+app.use(express.json());
+app.use(webhookCallback(bot, "express"));
+
+app.listen(3000, () => {
     console.log("LISTENING ON PORT 3000");
-}, 3000);
+});
 
 bot.setWebHook("https://atccontests.cyclic.app/");
 
