@@ -1,6 +1,7 @@
 {
   "name": "atc-contests",
   "version": "1.0.0",
+  "type":"commonjs",
   "description": "A telegram bot that gives info about upcoming competitive programming contests",
   "main": "./src/index.js",
   "scripts": {

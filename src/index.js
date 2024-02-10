@@ -9,7 +9,7 @@ var filePath = path.join(process.cwd(), 'src');
 filePath = path.join(filePath, 'data.json');
 
 const TOKEN = process.env.TELEGRAM_TOKEN;
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(TOKEN, {polling: true});
 const SERVER_URL = process.env.SERVER_URL;
 const TEL_API = `https://api.telegram.org/bot${TOKEN}`;
 const URI = `/webhook/${TOKEN}`;
@@ -19,8 +19,8 @@ const express = require('express');
 const app = express();
 
 const init = async () => {
-    const res = await axios.getAdapter(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
-    console.log(res.data);
+    const res = await axios.get(`${TEL_API}/setWebhook?url=${WEBHOOK_URI}`);
+    //console.log(res.data);
 };
 
 app.get('/', (req, res) => {
